@@ -165,7 +165,7 @@ local function RestartScene()
     end
 
         -- if they have 0 lives, go to the You Lose screen
-    if (numberCorrct == 5) then
+    if (numberCorrect == 5) then
         composer.gotoScene("you_win")
     else 
 
