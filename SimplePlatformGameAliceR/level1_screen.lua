@@ -28,6 +28,10 @@ sceneName = "level1_screen"
 local scene = composer.newScene( sceneName )
 
 -----------------------------------------------------------------------------------------
+local popSound = audio.loadSound("Sounds/Pop.mp3")
+local popSoundChannel
+
+-----------------------------------------------------------------------------------------
 -- LOCAL VARIABLES
 -----------------------------------------------------------------------------------------
 
@@ -173,6 +177,10 @@ end
 
 local function YouLoseTransition()
     composer.gotoScene( "you_lose" )
+end
+
+local function YouWinTransition()
+    composer.gotoScene( "you_win" )
 end
 
 local function onCollision( self, event )
