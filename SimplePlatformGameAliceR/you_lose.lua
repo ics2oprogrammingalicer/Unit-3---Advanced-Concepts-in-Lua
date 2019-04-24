@@ -35,7 +35,7 @@ local bkg
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------
-local youLose = audio.loadSound("Sound/YouLose.mp3")
+local youLose = audio.loadSound("Sounds/YouLose.mp3")
 local youLoseChannel
 --------------------------------------------------------------------------------------
 -- The function called when the screen doesn't exist
