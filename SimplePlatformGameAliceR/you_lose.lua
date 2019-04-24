@@ -35,7 +35,8 @@ local bkg
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------
-
+local youLose = audio.loadSound("Sound/YouLose.mp3")
+local YouLoseSoundChannel
 --------------------------------------------------------------------------------------
 -- The function called when the screen doesn't exist
 function scene:create( event )
@@ -50,6 +51,7 @@ function scene:create( event )
     bkg.width = display.contentWidth
     bkg.height = display.contentHeight
    
+    YouLoseSoundChannel = audio.play(youLose)
     -- Associating display objects with this scene 
     sceneGroup:insert( bkg )
   
