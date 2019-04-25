@@ -1,67 +1,75 @@
 -----------------------------------------------------------------------------------------
 --
--- SceneTemplate.lua
--- Scene Template (Composer API)
---
+-- intro_screen.lua
+-- Created by: Ms Raffin
+-- Date: Nov. 22nd, 2014
+-- Description: This is the splash screen of the game. It displays the app logo and the 
+-- company logo with some sort of animation...
 -----------------------------------------------------------------------------------------
 
------------------------------------------------------------------------------------------
--- INITIALIZATIONS
------------------------------------------------------------------------------------------
-
--- Calling Composer Library
+-- Use Composer Library
 local composer = require( "composer" )
 
-local widget = require( "widget" )
+-- Name the Scene
+sceneName = "splash_screen"
 
 -----------------------------------------------------------------------------------------
 
--- Naming Scene
-sceneName = "you_win"
-
------------------------------------------------------------------------------------------
-
--- Creating Scene Object
+-- Create Scene Object
 local scene = composer.newScene( sceneName )
 
------------------------------------------------------------------------------------------
--- FORWARD REFERENCES
------------------------------------------------------------------------------------------
-
--- local variables for the scene
-local bkg
-
 ----------------------------------------------------------------------------------------
+-- LOCAL VARIABLES
 -----------------------------------------------------------------------------------------
+ 
+-- The local variables for this scene
+local appLogo
+local scrollXSpeed = 8
+local scrollYSpeed = -3
+local nightTimeSounds = audio.loadSound("Sounds/nighttimestorm.mp3")
+local nightTimeSoundsChannel
+
+--------------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
------------------------------------------------------------------------------------------
-local cheerSound = audio.loadSound("Sounds/Cheer.m4a")
-local cheerSoundChannel
---------------------------------------------------------------------------------------
--- The function called when the screen doesn't exist
-function scene:create( event )
+--------------------------------------------------------------------------------------------
 
-    -- Creating a group that associates objects with the scene
-    local sceneGroup = self.view
+-- The function that moves the app logo on the screen
+local function rotateLogo()
+   appLogo:rotate(-5)
+   appLogo.alpha = appLogo.alpha - 0.01
+end
 
-    -- Display background
-    bkg = display.newImage("Images/YouWin.png")
-    bkg.x = display.contentCenterX
-    bkg.y = display.contentCenterY
-    bkg.width = display.contentWidth
-    bkg.height = display.contentHeight
-   
-    cheerSoundChannel = audio.play(cheerSound)
-    -- Associating display objects with this scene 
-    sceneGroup:insert( bkg )
-  
-end    
+-- The function that will go to the main menu 
+local function gotoMainMenu()
+    composer.gotoScene( "main_menu" )
+end
 
 -----------------------------------------------------------------------------------------
 -- GLOBAL SCENE FUNCTIONS
 -----------------------------------------------------------------------------------------
 
------------------------------------------------------------------------------------------
+-- The function called when the screen doesn't exist
+function scene:create( event )
+
+    -- Creating a group that attaches objects with the scene
+    local sceneGroup = self.view
+
+    -- set the background to be black
+    display.setDefault("background", 0, 0, 0)
+
+    -- Insert the app logo image
+    appLogo = display.newImageRect("Images/App Logo.png", 600, 600)
+
+    -- set the initial x and y position of the app logo
+    appLogo.x = display.contentCenterX
+    appLogo.y = display.contentHeight/2
+
+    -- Insert objects into the scene group in order to ONLY be associated with this scene
+    sceneGroup:insert( appLogo )
+
+end -- function scene:create( event )
+
+--------------------------------------------------------------------------------------------
 
 -- The function called when the scene is issued to appear on screen
 function scene:show( event )
@@ -75,19 +83,24 @@ function scene:show( event )
 
     -----------------------------------------------------------------------------------------
 
+    -- Called when the scene is still off screen (but is about to come on screen).
     if ( phase == "will" ) then
-        -- Called when the scene is still off screen (but is about to come on screen).
-
+       
     -----------------------------------------------------------------------------------------
 
     elseif ( phase == "did" ) then
+        -- start the splash screen music
+        nightTimeSoundsChannel = audio.play(nightTimeSounds )
 
-        -- Called when the scene is now on screen.
-        -- Insert code here to make the scene come alive.
-        -- Example: start timers, begin animation, play audio, etc.
+        -- Call the rotateLogo function as soon as we enter the frame.
+        Runtime:addEventListener("enterFrame", rotateLogo)
+
+        -- Go to the main menu screen after the given time.
+        timer.performWithDelay ( 3000, gotoMainMenu)          
+        
     end
 
-end
+end --function scene:show( event )
 
 -----------------------------------------------------------------------------------------
 
@@ -96,25 +109,25 @@ function scene:hide( event )
 
     -- Creating a group that associates objects with the scene
     local sceneGroup = self.view
-
-    -----------------------------------------------------------------------------------------
-
     local phase = event.phase
 
     -----------------------------------------------------------------------------------------
 
-    if ( phase == "will" ) then
-        -- Called when the scene is on screen (but is about to go off screen).
-        -- Insert code here to "pause" the scene.
-        -- Example: stop timers, stop animation, stop audio, etc.
+    -- Called when the scene is on screen (but is about to go off screen).
+    -- Insert code here to "pause" the scene.
+    -- Example: stop timers, stop animation, stop audio, etc.
+    if ( phase == "will" ) then  
 
     -----------------------------------------------------------------------------------------
 
+    -- Called immediately after scene goes off screen.
     elseif ( phase == "did" ) then
-        -- Called immediately after scene goes off screen.
+        
+        -- stop the jungle sounds channel for this screen
+        audio.stop(nightTimeSoundsChannel)
     end
 
-end
+end --function scene:hide( event )
 
 -----------------------------------------------------------------------------------------
 
@@ -130,7 +143,7 @@ function scene:destroy( event )
     -- Called prior to the removal of scene's view ("sceneGroup").
     -- Insert code here to clean up the scene.
     -- Example: remove display objects, save state, etc.
-end
+end -- function scene:destroy( event )
 
 -----------------------------------------------------------------------------------------
 -- EVENT LISTENERS
@@ -145,4 +158,3 @@ scene:addEventListener( "destroy", scene )
 -----------------------------------------------------------------------------------------
 
 return scene
-
