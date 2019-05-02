@@ -54,7 +54,11 @@ function scene:create( event )
     bkg_image:toBack()
 
         -- Insert background image into the scene group in order to ONLY be associated with this scene
-    sceneGroup:insert( bkg_image )    
+    sceneGroup:insert( bkg_image )   
+
+    -- create background sound
+    local bkgSound = audio.loadSound("Sounds/Perception.mp3")
+    local bkgSoundsChannel 
 
 end --function scene:create( event )
 
@@ -80,6 +84,8 @@ function scene:show( event )
         -- Insert code here to make the scene come alive.
         -- Example: start timers, begin animation, play audio, etc.
 
+        -- play background music for this scene
+        bkgSoundsChannel = audio.play(bkgSound, { channel=4, loops=-1 } )
     end
 
 end --function scene:show( event )
@@ -104,6 +110,9 @@ function scene:hide( event )
 
     elseif ( phase == "did" ) then
         -- Called immediately after scene goes off screen.
+
+        -- stop the background music when leaving this scene
+        audio.stop( bkgSoundsChannel)
     end
 
 end --function scene:hide( event )

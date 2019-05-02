@@ -54,7 +54,7 @@ function scene:create( event )
     -----------------------------------------------------------------------------------------
 
     -- Insert the background image and set it to the center of the screen
-    bkg_image = display.newImageRect("Images/Credits Screen.png", display.contentWidth, display.contentHeight)
+    bkg_image = display.newImageRect("Images/CreditsScreenTrevorC@2x.png", display.contentWidth, display.contentHeight)
     bkg_image.x = display.contentCenterX
     bkg_image.y = display.contentCenterY
     bkg_image.width = display.contentWidth
@@ -66,6 +66,9 @@ function scene:create( event )
     -- Send the background image to the back layer so all other objects can be on top
     bkg_image:toBack()
 
+    -- create background sound
+    local bkgSound = audio.loadSound("Sounds/Perception.mp3")
+    local bkgSoundsChannel
     -----------------------------------------------------------------------------------------
     -- BUTTON WIDGETS
     -----------------------------------------------------------------------------------------
@@ -74,16 +77,18 @@ function scene:create( event )
     backButton = widget.newButton( 
     {
         -- Setting Position
-        x = display.contentWidth*1/8,
-        y = display.contentHeight*1/16,
+        x = display.contentWidth*7/8,
+        y = display.contentHeight*14/16,
+        width = 200,
+        height = 100,
 
         -- Setting Dimensions
         -- width = 1000,
         -- height = 106,
 
         -- Setting Visual Properties
-        defaultFile = "Images/Back Button Unpressed.png",
-        overFile = "Images/Back Button Pressed.png",
+        defaultFile = "Images/BackButtonUnpressedAlice@2x.png",
+        overFile = "Images/BackButtonPressedAlice@2x.png",
 
         -- Setting Functional Properties
         onRelease = BackTransition
@@ -120,6 +125,9 @@ function scene:show( event )
         -- Called when the scene is now on screen.
         -- Insert code here to make the scene come alive.
         -- Example: start timers, begin animation, play audio, etc.
+
+         -- play background music for this scene
+        bkgSoundsChannel = audio.play(bkgSound, { channel=2, loops=-1 } )
     end
 
 end -- function scene:show( event )
@@ -147,6 +155,9 @@ function scene:hide( event )
 
     elseif ( phase == "did" ) then
         -- Called immediately after scene goes off screen.
+
+        -- stop the background music when leaving this scene
+        audio.stop( bkgSoundsChannel)
     end
 
 end --function scene:hide( event )

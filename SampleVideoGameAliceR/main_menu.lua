@@ -1,7 +1,7 @@
 -----------------------------------------------------------------------------------------
 --
 -- main_menu.lua
--- Created by: Your Name
+-- Created by: Alice R
 -- Date: Month Day, Year
 -- Description: This is the main menu, displaying the credits, instructions & play buttons.
 -----------------------------------------------------------------------------------------
@@ -36,8 +36,8 @@ local bkg_image
 local playButton
 local creditsButton
 local instructionsButton
-local horrorSound = audio.loadSound("Sounds/horror.mp3")
-local horrorSoundsChannel
+local bkgSound = audio.loadSound("Sounds/bkg.mp3")
+local bkgSoundsChannel
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------
@@ -79,7 +79,7 @@ function scene:create( event )
     -----------------------------------------------------------------------------------------
 
     -- Insert the background image and set it to the center of the screen
-    bkg_image = display.newImage("Images/main_menu.png")
+    bkg_image = display.newImage("Images/MainMenuLinhH@2x.png")
     bkg_image.x = display.contentCenterX
     bkg_image.y = display.contentCenterY
     bkg_image.width = display.contentWidth
@@ -100,29 +100,32 @@ function scene:create( event )
     playButton = widget.newButton( 
         {   
             -- Set its position on the screen relative to the screen size
-            x = display.contentWidth/2,
+            x = display.contentWidth*1/8,
             y = display.contentHeight*7/8,
+            width = 200,
+             height = 100,
 
             -- Insert the images here
-            defaultFile = "Images/Start Button Unpressed.png",
-            overFile = "Images/Start Button Pressed.png",
+            defaultFile = "Images/PlayButtonUnpressedAliceR@2x.png",
+            overFile = "Images/PlayButtonPressedAliceR@2x.png",
 
             -- When the button is released, call the Level1 screen transition function
             onRelease = Level1ScreenTransition          
         } )
 
-    -----------------------------------------------------------------------------------------
-
+    -------------------------------------------------------------------------------------------
     -- Creating Credits Button
     creditsButton = widget.newButton( 
         {
             -- Set its position on the screen relative to the screen size
-            x = display.contentWidth*7/8,
-            y = display.contentHeight*2/8,
+            x = display.contentWidth*1/8,
+            y = display.contentHeight*3/8,
+             width = 200,
+             height = 100,
 
             -- Insert the images here
-            defaultFile = "Images/Credits Button Unpressed.png",
-            overFile = "Images/Credits Button Pressed.png",
+            defaultFile = "Images/CreditsButtonUnpressedAliceR@2x.png",
+            overFile = "Images/CreditsButtonPressedAliceR@2x.png",
 
             -- When the button is released, call the Credits transition function
             onRelease = CreditsTransition
@@ -137,11 +140,13 @@ function scene:create( event )
         {
             -- Set its position on the screen relative to the screen size
             x = display.contentWidth*1/8,
-            y = display.contentHeight*2/8,
+            y = display.contentHeight*5/8,
+            width = 200, 
+            height = 100,
 
             -- Insert the images here
-            defaultFile = "Images/Instructions Button Unpressed.png",
-            overFile = "Images/Instructions Button Pressed.png",
+            defaultFile = "Images/InstructionsButtonUnpressedAliceR@2x.png",
+            overFile = "Images/InstructionsButtonPressedAliceR@2x.png",
 
             -- When the button is released, call the Credits transition function
             onRelease = InstructionsTransition
@@ -154,8 +159,6 @@ function scene:create( event )
     sceneGroup:insert( instructionsButton )
 
 end -- function scene:create( event )   
-
-horrorSoundChannel = audio.play(horrorSound)
 
 
 -----------------------------------------------------------------------------------------
@@ -181,7 +184,9 @@ function scene:show( event )
     -- Insert code here to make the scene come alive.
     -- Example: start timers, begin animation, play audio, etc.
     elseif ( phase == "did" ) then       
-        
+        -- play background music for this scene
+        bkgSoundsChannel = audio.play(bkgSound, { channel=1, loops=-1 } )
+
 
     end
 
@@ -200,16 +205,17 @@ function scene:hide( event )
     local phase = event.phase
 
     -----------------------------------------------------------------------------------------
-
+    -- Called when the scene is on screen (but is about to go off screen).
+    -- Insert code here to "pause" the scene.
+    -- Example: stop timers, stop animation, stop audio, etc.
     if ( phase == "will" ) then
-        -- Called when the scene is on screen (but is about to go off screen).
-        -- Insert code here to "pause" the scene.
-        -- Example: stop timers, stop animation, stop audio, etc.
-
+        
     -----------------------------------------------------------------------------------------
 
     elseif ( phase == "did" ) then
         -- Called immediately after scene goes off screen.
+         -- stop the background music when leaving this scene
+        audio.stop( bkgSoundsChannel)
     end
 
 end -- function scene:hide( event )
