@@ -6,7 +6,7 @@
 -- Date: Month Day, Year
 -- Description: This is the credits page, displaying a back button to the main menu.
 -----------------------------------------------------------------------------------------
-
+display.setStatusBar(display.HiddenStatusBar)
 -----------------------------------------------------------------------------------------
 -- INITIALIZATIONS
 -----------------------------------------------------------------------------------------
@@ -67,7 +67,7 @@ function scene:create( event )
     bkg_image:toBack()
 
     -- create background sound
-    local bkgSound = audio.loadSound("Sounds/Perception.mp3")
+    local bkgSounds = audio.loadSound("Sounds/Perception.mp3")
     local bkgSoundsChannel
     -----------------------------------------------------------------------------------------
     -- BUTTON WIDGETS
@@ -127,7 +127,7 @@ function scene:show( event )
         -- Example: start timers, begin animation, play audio, etc.
 
         -- play background music for this scene
-        bkgSoundsChannel = audio.play(bkgSound, { channel=3, loops=-1 } )
+        bkgSoundsChannel = audio.play(bkgSounds, { channel=3, loops=-1 } )
     end
 
 end -- function scene:show( event )

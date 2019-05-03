@@ -6,6 +6,8 @@
 -- Description: This is the splash screen of the game. It displays the 
 -- company logo that...
 -----------------------------------------------------------------------------------------
+display.setStatusBar(display.HiddenStatusBar)
+-----------------------------------------------------------------------------------------
 
 -- Use Composer Library
 local composer = require( "composer" )

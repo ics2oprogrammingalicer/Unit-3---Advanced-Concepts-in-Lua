@@ -5,7 +5,7 @@
 -- Date: Month Day, Year
 -- Description: This is the level 1 screen of the game.
 -----------------------------------------------------------------------------------------
-
+display.setStatusBar(display.HiddenStatusBar)
 -----------------------------------------------------------------------------------------
 -- INITIALIZATIONS
 -----------------------------------------------------------------------------------------
@@ -57,8 +57,8 @@ function scene:create( event )
     sceneGroup:insert( bkg_image )   
 
     -- create background sound
-    local bkgSound = audio.loadSound("Sounds/Perception.mp3")
-    local bkgSoundsChannel 
+    local bkgMusic = audio.loadSound("Sounds/Perception.mp3")
+    local bkgMusicChannel 
 
 end --function scene:create( event )
 
@@ -85,7 +85,7 @@ function scene:show( event )
         -- Example: start timers, begin animation, play audio, etc.
 
         -- play background music for this scene
-        bkgSoundsChannel = audio.play(bkgSound, { channel=4, loops=-1 } )
+        bkgMusicChannel = audio.play(bkgMusic, { channel=4, loops=-1 } )
     end
 
 end --function scene:show( event )
@@ -112,7 +112,7 @@ function scene:hide( event )
         -- Called immediately after scene goes off screen.
 
         -- stop the background music when leaving this scene
-        audio.stop( bkgSoundsChannel)
+        audio.stop( bkgMusicChannel)
     end
 
 end --function scene:hide( event )

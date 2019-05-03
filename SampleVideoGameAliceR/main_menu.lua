@@ -5,7 +5,7 @@
 -- Date: Month Day, Year
 -- Description: This is the main menu, displaying the credits, instructions & play buttons.
 -----------------------------------------------------------------------------------------
-
+display.setStatusBar(display.HiddenStatusBar)
 -----------------------------------------------------------------------------------------
 -- INITIALIZATIONS
 -----------------------------------------------------------------------------------------
@@ -29,6 +29,16 @@ sceneName = "main_menu"
 local scene = composer.newScene( sceneName )
 
 -----------------------------------------------------------------------------------------
+-- SOUNDS
+-----------------------------------------------------------------------------------------
+local bkgMusic = audio.loadSound("Sounds/bkg.mp3")
+local bkgMusicChannel
+
+-----------------------------------------------------------------------------------------
+-- GLOBAL VARIABLES
+-----------------------------------------------------------------------------------------
+soundOn = true
+-----------------------------------------------------------------------------------------
 -- LOCAL VARIABLES
 -----------------------------------------------------------------------------------------
 
@@ -36,8 +46,8 @@ local bkg_image
 local playButton
 local creditsButton
 local instructionsButton
-local bkgSound = audio.loadSound("Sounds/bkg.mp3")
-local bkgSoundsChannel
+local muteButton
+local unmuteButton
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------
@@ -61,16 +71,51 @@ local function InstructionsTransition( )
     composer.gotoScene( "Instructions_screen", {effect = "slideDown", time = 500})
 end 
 
+-----------------------------------------------------------------------------------------
 
+local function Mute(touch)
+    if (touch.phase == "ended") then
+        -- pause the sound
+        audio.pause(bkgMusic)
+        --set the boolean variable to be false( sound is now muted)
+        soundOn = false
+        -- hide the mute button
+        muteButton.isVisible = false
+        -- make the unmute button visible
+        unmuteButton.isVisible = true
+    end
+end
 
+local function Unmute(touch)
+    if (touch.phase == "ended") then
+        -- play the sound
+        bkgMusicChannel = audio.play(bkgMusic)
+        --set the boolean variable to be false( sound is now muted)
+        soundOn = true
+        -- hide the mute button
+        muteButton.isVisible = true
+        -- make the unmute button visible
+        unmuteButton.isVisible = false
+    end
+end
 -----------------------------------------------------------------------------------------
 -- GLOBAL SCENE FUNCTIONS
 -----------------------------------------------------------------------------------------
 
 -- The function called when the screen doesn't exist
 function scene:create( event )
+    
+    -- creating mute button
+    muteButton = display.newImageRect("Images/MuteButtonUnpressedAliceR@2x.png",100, 100)
+    muteButton.x = display.contentWidth*3/10
+    muteButton.y = display.contentHeight*9/10
+    muteButton.isVisible = true
 
-
+    -- creating unmute button
+    unmuteButton = display.newImageRect("Images/MuteButtonPressedAliceR@2x.png",100, 100)
+    unmuteButton.x = display.contentWidth*3/10
+    unmuteButton.y = display.contentHeight*9/10
+    unmuteButton.isVisible = false
     -- Creating a group that associates objects with the scene
     local sceneGroup = self.view
 
@@ -157,6 +202,8 @@ function scene:create( event )
     sceneGroup:insert( playButton )
     sceneGroup:insert( creditsButton )
     sceneGroup:insert( instructionsButton )
+    sceneGroup:insert( muteButton )
+    sceneGroup:insert( unmuteButton )
 
 end -- function scene:create( event )   
 
@@ -186,8 +233,8 @@ function scene:show( event )
     elseif ( phase == "did" ) then       
         -- play background music for this scene
         bkgSoundsChannel = audio.play(bkgSound, { channel=1, loops=-1 } )
-
-
+        muteButton:addEventListener("touch", Mute)
+        unmuteButton:addEventListener("touch", Unmute)
     end
 
 end -- function scene:show( event )
@@ -205,17 +252,17 @@ function scene:hide( event )
     local phase = event.phase
 
     -----------------------------------------------------------------------------------------
+     if ( phase == "will" ) then
     -- Called when the scene is on screen (but is about to go off screen).
     -- Insert code here to "pause" the scene.
     -- Example: stop timers, stop animation, stop audio, etc.
-    if ( phase == "will" ) then
-        
+      audio.stop( bkgMusicChannel)        
     -----------------------------------------------------------------------------------------
 
     elseif ( phase == "did" ) then
         -- Called immediately after scene goes off screen.
-         -- stop the background music when leaving this scene
-        audio.stop( bkgSoundsChannel)
+        muteButton:removeEventListener("touch", Mute)
+        unmuteButton:removeEventListener("touch", Unmute)
     end
 
 end -- function scene:hide( event )
