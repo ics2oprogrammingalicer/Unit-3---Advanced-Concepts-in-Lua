@@ -67,8 +67,8 @@ function scene:create( event )
     bkg_image:toBack()
 
     -- create background sound
-    local bkgSounds = audio.loadSound("Sounds/Perception.mp3")
-    local bkgSoundsChannel
+    local bkgMusic = audio.loadSound("Sounds/Perception.mp3")
+    local bkgMusicChannel
     -----------------------------------------------------------------------------------------
     -- BUTTON WIDGETS
     -----------------------------------------------------------------------------------------
@@ -127,7 +127,7 @@ function scene:show( event )
         -- Example: start timers, begin animation, play audio, etc.
 
         -- play background music for this scene
-        bkgSoundsChannel = audio.play(bkgSounds, { channel=3, loops=-1 } )
+        bkgMusicChannel = audio.play(bkgMusic, { channel=3, loops=-1 } )
     end
 
 end -- function scene:show( event )
@@ -157,7 +157,7 @@ function scene:hide( event )
         -- Called immediately after scene goes off screen.
 
          -- stop the background music when leaving this scene
-        audio.stop( bkgSoundsChannel)
+        audio.stop( bkgMusicChannel)
     end
 
 end --function scene:hide( event )
